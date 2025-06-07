@@ -1,5 +1,5 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
 # Set page config
 st.set_page_config(page_title="AI Content Generator", page_icon="🧠")
@@ -8,8 +8,8 @@ st.set_page_config(page_title="AI Content Generator", page_icon="🧠")
 st.title("🧠 AI Content Generator")
 st.markdown("Generate blog ideas, full blogs, emails, and social media captions with AI!")
 
-# API Key
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# Initialize OpenAI client
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Content type selector
 content_type = st.selectbox("What would you like to generate?", ["Blog Ideas", "Full Blog", "Marketing Email", "Social Media Caption"])
@@ -32,19 +32,18 @@ if st.button("Generate"):
             elif content_type == "Social Media Caption":
                 prompt = f"Write a catchy social media caption for a post about: {topic}. Include emojis and hashtags."
 
-            # Call OpenAI
-          from openai import OpenAI
+            # OpenAI API call
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that creates content."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.7,
+                max_tokens=800
+            )
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+            output = response.choices[0].message.content
+            st.subheader("✨ Generated Content")
+            st.write(output)
 
-response = client.chat.completions.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant that creates content."},
-        {"role": "user", "content": prompt}
-    ],
-    temperature=0.7,
-    max_tokens=800
-)
-
-output = response.choices[0].message.content
