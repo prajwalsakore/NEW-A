@@ -12,7 +12,7 @@ st.markdown("Generate blog ideas, full blogs, emails, and social media captions 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Content type selector
-content_type = st.selectbox("What would you like to generate?", ["Blog Ideas", "Full Blog", "Marketing Email", "Social Media Caption", "Video Scripts])
+content_type = st.selectbox("What would you like to generate?", ["Blog Ideas", "Full Blog", "Marketing Email", "Social Media Caption", "Video Scripts"])
 
 # Topic input
 topic = st.text_input("Enter your topic:", placeholder="e.g., Digital Marketing Tips")
