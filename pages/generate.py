@@ -33,16 +33,18 @@ if st.button("Generate"):
                 prompt = f"Write a catchy social media caption for a post about: {topic}. Include emojis and hashtags."
 
             # Call OpenAI
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant that creates content."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.7,
-                max_tokens=800
-            )
+          from openai import OpenAI
 
-            output = response['choices'][0]['message']['content']
-            st.subheader("✨ Generated Content")
-            st.write(output)
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant that creates content."},
+        {"role": "user", "content": prompt}
+    ],
+    temperature=0.7,
+    max_tokens=800
+)
+
+output = response.choices[0].message.content
